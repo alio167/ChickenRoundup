@@ -13,94 +13,81 @@ class GameScene: SKScene {
     // Declare the menu objects
     var gameTitle1: SKLabelNode!        // "Chicken"
     var gameTitle2: SKLabelNode!        // "Roundup"
-    var chickenImage: SKSpriteNode!
-    var levelsButton: SKShapeNode!
+    var backgroundImage: SKSpriteNode!
+    var menuButton: SKSpriteNode!
+    var objectsBar: SKShapeNode!
     var levelsText: SKLabelNode!
-    var instructionsButton: SKShapeNode!
-    var instructionsText: SKLabelNode!
+    var timerFrame: SKShapeNode!
+    var timer: SKLabelNode!
     
     
     // This function is called once GameScene has loaded
     override func didMove(to view: SKView) {
-        // Create the game menu
-        initializeMenu()
+        // Create the game frame
+        initializeGameFrame()
+        
+        // Add level specific objects
+        initializeLevel()
     }
     
     // This function creates the game menu
-    private func initializeMenu() {
+    private func initializeGameFrame() {
+        // Set background
+        backgroundImage = SKSpriteNode(imageNamed: "Pen")
+        backgroundImage.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        self.addChild(backgroundImage)
         
-        self.backgroundColor = UIColor(red: 56.0/255, green: 134.0/255, blue: 255.0/255, alpha: 1.0)
+        // Initialize timerFrame
+        let topLeft1 = CGPoint(x: -300, y: 50)
+        let bottomLeft1 = CGPoint(x: -300, y: -50)
+        let topRight1 = CGPoint(x: 300, y: 50)
+        let bottomRight1 = CGPoint(x: 300, y: -50)
+        let path1 = CGMutablePath()
+        path1.addLine(to: topLeft1)
+        path1.addLines(between: [topLeft1, bottomLeft1, bottomRight1, topRight1])
+        timerFrame = SKShapeNode()
+        timerFrame.name = "timerFrame"
+        timerFrame.zPosition = 1
+        timerFrame.position = CGPoint(x: 0, y: (frame.size.height / -2) + 200)
+        timerFrame.fillColor = UIColor.red
+        timerFrame.path = path1
+        self.addChild(timerFrame)
         
-        // Initialize gameTitle1 and add it to GameScene
-        gameTitle1 = SKLabelNode(fontNamed: "ArielRoundedMTBold")
-        gameTitle1.zPosition = 1
-        gameTitle1.position = CGPoint(x: 0, y: (frame.size.height / 2) - 250)
-        gameTitle1.fontSize = 100
-        gameTitle1.text = "Chicken"
-        gameTitle1.fontColor = SKColor.black
-        self.addChild(gameTitle1)
+        // Initialize timer
+        timer = SKLabelNode(fontNamed: "ArielRoundedMTBold")
+        timer.zPosition = 2
+        timer.position = CGPoint(x: 0, y: timerFrame.position.y - 15)
+        timer.fontSize = 40
+        timer.text = "2:00"
+        timer.fontColor = SKColor.black
+        self.addChild(timer)
         
-        // Initialize chickenImage and add it to GameScene
-        chickenImage = SKSpriteNode(imageNamed: "Basic Chicken")
-        chickenImage.zPosition = 1
-        chickenImage.position = CGPoint(x: 0, y: gameTitle1.position.y - 200)
-        chickenImage.run(SKAction.scale(to: 5, duration: 0))
-        self.addChild(chickenImage)
-        
-        // Initialize gameTitle2 and add it to GameScene
-        gameTitle2 = SKLabelNode(fontNamed: "ArielRoundedMTBold")
-        gameTitle2.zPosition = 1
-        gameTitle2.position = CGPoint(x: 0, y: chickenImage.position.y - 250)
-        gameTitle2.fontSize = 100
-        gameTitle2.text = "Roundup"
-        gameTitle2.fontColor = SKColor.black
-        self.addChild(gameTitle2)
-        
-        // Make square button shape
-        let topLeft = CGPoint(x: -300, y: 50)
-        let bottomLeft = CGPoint(x: -300, y: -50)
-        let topRight = CGPoint(x: 300, y: 50)
-        let bottomRight = CGPoint(x: 300, y: -50)
-        let path = CGMutablePath()
-        path.addLine(to: topLeft)
-        path.addLines(between: [topLeft, bottomLeft, bottomRight, topRight])
-        
-        // Initialize instructionsButton
-        instructionsButton = SKShapeNode()
-        instructionsButton.name = "instructionsButton"
-        instructionsButton.zPosition = 1
-        instructionsButton.position = CGPoint(x: 0, y: (frame.size.height / -2) + 200)
-        instructionsButton.fillColor = UIColor(red: 156.0/255, green: 210.0/255, blue: 255.0/255, alpha: 1.0)
-        instructionsButton.path = path
-        self.addChild(instructionsButton)
-        
-        // Initialize instructionsText
-        instructionsText = SKLabelNode(fontNamed: "ArielRoundedMTBold")
-        instructionsText.zPosition = 2
-        instructionsText.position = CGPoint(x: 0, y: instructionsButton.position.y - 15)
-        instructionsText.fontSize = 40
-        instructionsText.text = "Instructions"
-        instructionsText.fontColor = SKColor.black
-        self.addChild(instructionsText)
+        // Initialize menu button
+        menuButton = SKSpriteNode(imageNamed: "Pen")
+        menuButton.position = CGPoint(x: (frame.size.width / -2) + 100, y: frame.size.height / 2)
+        self.addChild(menuButton)
         
         
-        // Initialize levelsButton
-        levelsButton = SKShapeNode()
-        levelsButton.name = "levelsButton"
-        levelsButton.zPosition = 1
-        levelsButton.position = CGPoint(x: 0, y: instructionsButton.position.y + 150)
-        levelsButton.fillColor = UIColor(red: 156.0/255, green: 210.0/255, blue: 255.0/255, alpha: 1.0)
-        levelsButton.path = path
-        self.addChild(levelsButton)
+        // Initialize objects bar
+        let topLeft2 = CGPoint(x: -300, y: 50)
+        let bottomLeft2 = CGPoint(x: -300, y: -50)
+        let topRight2 = CGPoint(x: 300, y: 50)
+        let bottomRight2 = CGPoint(x: 300, y: -50)
+        let path2 = CGMutablePath()
+        path2.addLine(to: topLeft2)
+        path2.addLines(between: [topLeft2, bottomLeft2, bottomRight2, topRight2])
+        objectsBar = SKShapeNode()
+        objectsBar.name = "timerFrame"
+        objectsBar.zPosition = 1
+        objectsBar.position = CGPoint(x: 0, y: frame.size.height / 2)
+        objectsBar.fillColor = UIColor.blue
+        objectsBar.path = path2
+        self.addChild(objectsBar)
         
-        // Initialize levelsText
-        levelsText = SKLabelNode(fontNamed: "ArielRoundedMTBold")
-        levelsText.zPosition = 2
-        levelsText.position = CGPoint(x: 0, y: levelsButton.position.y - 15)
-        levelsText.fontSize = 40
-        levelsText.text = "Levels"
-        levelsText.fontColor = SKColor.black
-        self.addChild(levelsText)
+    }
+    
+    private func initializeLevel() {
+        
     }
     
     
