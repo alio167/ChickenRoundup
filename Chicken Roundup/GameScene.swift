@@ -18,11 +18,31 @@ class GameScene: SKScene {
     var timer: SKLabelNode!
     var game: GameManager!
     
+    // Pen restrictions
+    var penMaxY: CGFloat!
+    var penMinY: CGFloat!
+    var penRangeY: CGFloat!
+    var penMaxX: CGFloat!
+    var penMinX: CGFloat!
+    var penRangeX: CGFloat!
+    
     // Level specific?
     var currentLevel = 0
+    var chickenArray: [(node: SKSpriteNode, type: String, x: Int, y: Int)] = []
+    var treeArray: [(node: SKSpriteNode, x: Int, y: Int)] = []
+    var fenceArray: [(node: SKSpriteNode, x: Int, y: Int)] = []
+    var cornArray: [(node: SKSpriteNode, x: Int, y: Int)] = []
     
     // This function is called once GameScene has loaded
     override func didMove(to view: SKView) {
+        // Set pen restrictions
+        penMaxY = (frame.size.height / 2) - 140
+        penMinY = (frame.size.height / -2) + 150
+        penRangeY = penMaxY - penMinY
+        penMaxX = (frame.size.width / 2) - 100
+        penMinX = (frame.size.width / -2) + 100
+        penRangeX = penMaxX - penMinX
+        
         // Create the game frame
         game = GameManager(scene: self)
         initializeGameFrame()
@@ -103,27 +123,34 @@ class GameScene: SKScene {
         let numFences = 0
         let numCorn = 0
         
-        let penMaxY = (frame.size.height / 2) - 140
-        let penMinY = (frame.size.height / -2) + 150
-        let penRangeY = penMaxY - penMinY
-        let penMaxX = frame.size.width / 2
-        let penMinX = frame.size.width / -2
-        let penRangeX = penMaxX - penMinX
+        
+        
+        // Place trees
+        for _ in 0..<numTrees {
+            // Initialize tree
+            
+            // Randomize location of tree
+            
+            // Add to array of trees and game
+        }
         
         // Place basic chickens
         for _ in 0..<numBasicChickens {
-            //Initialize chicken
+            // Initialize chicken
             let basicChicken: SKSpriteNode = SKSpriteNode(imageNamed: "Basic Chicken")
             basicChicken.size.height = 100
-            basicChicken.size.width = 100
+            basicChicken.size.width = 70
             basicChicken.zPosition = 4
-            self.addChild(basicChicken)
             
-            // Randomize location of chicken
-            let randomX = CGFloat(arc4random_uniform(UInt32(penRangeY))) + penMinY
-            let randomY = CGFloat(arc4random_uniform(UInt32(penRangeX))) + penMinX
+            // Randomize location of chicken, making sure its not in the same place as the trees
+            // while true and then break
+            let randomX = CGFloat(arc4random_uniform(UInt32(penRangeX))) + penMinX
+            let randomY = CGFloat(arc4random_uniform(UInt32(penRangeY))) + penMinY
             basicChicken.position = CGPoint(x: randomX, y: randomY)
             
+            // Add to array of chickens and game
+            chickenArray.append((node: basicChicken, type: "basic", x: Int(randomX), y: Int(randomY)))
+            self.addChild(basicChicken)
         }
         
         // Place stupid chickens
@@ -131,15 +158,13 @@ class GameScene: SKScene {
             
         }
         
-        // Place trees
-        for _ in 0..<numTrees {
-            
-        }
+        
         
         // Store fences
         
         // Store corn
     }
+    
     
     
     func touchDown(atPoint pos : CGPoint) {
@@ -187,7 +212,8 @@ class GameScene: SKScene {
     }
     
     
+    // This function is called before each frame is rendered.
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        game.update(time: currentTime)
     }
 }
