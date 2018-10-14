@@ -9,5 +9,11 @@
 import SpriteKit
 
 class GameManager {
+    var scene: GameScene!
+    var nextTime: Double?
+    var timeExtension: Double = 0.15
     
+    init(scene: GameScene) {
+        self.scene = scene
+    }
 }
