@@ -22,6 +22,7 @@
 		6F9C008221A0D2AF00C05C3D /* BasicChicken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9C008121A0D2AF00C05C3D /* BasicChicken.swift */; };
 		6F9C008421A0D93400C05C3D /* StupidChicken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9C008321A0D93400C05C3D /* StupidChicken.swift */; };
 		6F9C008621A0D9B400C05C3D /* Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9C008521A0D9B400C05C3D /* Tree.swift */; };
+		6FA8FBA521B4BA9A003A5876 /* TouchableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA8FBA421B4BA9A003A5876 /* TouchableObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		6F9C008121A0D2AF00C05C3D /* BasicChicken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicChicken.swift; sourceTree = "<group>"; };
 		6F9C008321A0D93400C05C3D /* StupidChicken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StupidChicken.swift; sourceTree = "<group>"; };
 		6F9C008521A0D9B400C05C3D /* Tree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tree.swift; sourceTree = "<group>"; };
+		6FA8FBA421B4BA9A003A5876 /* TouchableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchableObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				6F23C95D2169B5F20037B608 /* MenuViewController.swift */,
 				6F23C95F2169B6070037B608 /* InstructionsViewController.swift */,
 				6F23C9612169B6150037B608 /* LevelsViewController.swift */,
+				6FA8FBA421B4BA9A003A5876 /* TouchableObject.swift */,
 				6F9C008121A0D2AF00C05C3D /* BasicChicken.swift */,
 				6F9C008321A0D93400C05C3D /* StupidChicken.swift */,
 				6F9C008521A0D9B400C05C3D /* Tree.swift */,
@@ -174,6 +177,7 @@
 				6F9C008221A0D2AF00C05C3D /* BasicChicken.swift in Sources */,
 				6F9C008621A0D9B400C05C3D /* Tree.swift in Sources */,
 				6F23C9622169B6150037B608 /* LevelsViewController.swift in Sources */,
+				6FA8FBA521B4BA9A003A5876 /* TouchableObject.swift in Sources */,
 				6F9C008421A0D93400C05C3D /* StupidChicken.swift in Sources */,
 				6F23C94A21618C860037B608 /* GameViewController.swift in Sources */,
 				6F23C94221618C860037B608 /* AppDelegate.swift in Sources */,

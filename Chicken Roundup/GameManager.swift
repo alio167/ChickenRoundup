@@ -33,6 +33,7 @@ class GameManager {
             let chickenHeight = scene.chickenArray[chickenInt].node.size.height
             let boundsResults = scene.outOfBounds(objectPosition: chickenPosition, width: chickenWidth, height: chickenHeight)
             if boundsResults.outOfBounds {
+                print("chicken out of bounds")
                 // Stop the chicken
                 scene.chickenArray[chickenInt].node.removeAllActions()
                 
@@ -46,6 +47,7 @@ class GameManager {
                     newX -= boundsResults.distance
                 } else if boundsResults.direction == 2 {
                     // go right
+                    print("going right")
                     newX += boundsResults.distance
                 } else if boundsResults.direction == 3 {
                     // go up

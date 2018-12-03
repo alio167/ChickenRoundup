@@ -49,16 +49,16 @@ class GameScene: SKScene {
     // Gesture recognition
     var previousTranslateX: CGFloat = 0.0
     var previousTranslateY: CGFloat = 0.0
-    var nodeBeingMoved: SKSpriteNode!
+    var selectedChicken: TouchableObject!
     var fingerOnNode: Bool = false
     
     // This function is called once GameScene has loaded
     override func didMove(to view: SKView) {
-        //setupTapDetection()
-        
-        
-//        let pan = UIPanGestureRecognizer(target: self, action: "panned:")
-//        view.addGestureRecognizer(pan)
+        // Set gesture recognition info
+        let texture = SKTexture(imageNamed: "Basic Chicken")
+        selectedChicken = TouchableObject(texture: texture, name: "none", id: -1)
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanFrom))
+        view.addGestureRecognizer(panGestureRecognizer)
         
         
         // Set pen restrictions
@@ -77,101 +77,6 @@ class GameScene: SKScene {
         currentLevel = 1 // change depending on button selected
         initializeLevel()
     }
-    
-//    func panned(sender: UIPanGestureRecognizer) {
-//        let location = sender.location(in: view)
-//        let velocity = sender.velocity(in: view)
-//        let translation = sender.translation(in: view)
-//
-//
-//
-//        if sender.state == .began {
-//            moving = true
-//            let viewPoint = sender.location(in: view!)
-//            let scenePoint = convertPoint(fromView: viewPoint)
-//            let objectsTapped = nodes(at: scenePoint)
-//            nodeBeingMoved = objectsTapped.first! as? BasicChicken
-//        } else if sender.state == .changed {
-//            print("gesture changing")
-//        } else if sender.state == .ended {
-//            moving = false
-//        }
-//
-//
-//        if objectsTapped.count > 1 {
-//            if let object = objectsTapped.first! as? BasicChicken {
-//                object.position = CGPoint(x: object.position.x + translateX, y: object.position.y + translateY)
-//            }
-//            if let object = objectsTapped.first! as? StupidChicken {
-//                object.position = CGPoint(x: object.position.x + translateX, y: object.position.y + translateY)
-//            }
-//        }
-//
-//
-//
-//
-//        // retrieve pan movement along the x-axis of the view since the gesture began
-//        let currentTranslateX = sender.translation(in: view!).x
-//        let currentTranslateY = sender.translation(in: view!).y
-//
-//        // calculate translation since last measure
-//        let translateX = currentTranslateX - previousTranslateX
-//        let translateY = currentTranslateY - previousTranslateY
-//
-//        // move shape within frame boundaries
-//        let viewPoint = sender.location(in: view!)
-//        let scenePoint = convertPoint(fromView: viewPoint)
-//        let objectsTapped = nodes(at: scenePoint)
-//        if objectsTapped.count > 1 {
-//            if let object = objectsTapped.first! as? BasicChicken {
-//                object.position = CGPoint(x: object.position.x + translateX, y: object.position.y + translateY)
-//            }
-//            if let object = objectsTapped.first! as? StupidChicken {
-//                object.position = CGPoint(x: object.position.x + translateX, y: object.position.y + translateY)
-//            }
-//        }
-//
-//        // (re-)set previous measurement
-//        if sender.state == .ended {
-//            previousTranslateX = 0
-//            previousTranslateY = 0
-//        } else {
-//            previousTranslateX = currentTranslateX
-//            previousTranslateY = currentTranslateY
-//        }
-//    }
-    
-//    func setupTapDetection() {
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
-//        view?.addGestureRecognizer(tap)
-//    }
-//
-//    @objc func tapped(_ tap: UITapGestureRecognizer) {
-//        // Only check start location of tap
-//        if tap.state != .ended {
-//            return
-//        }
-//
-//        let viewPoint = tap.location(in: tap.view)
-//        let scenePoint = convertPoint(fromView: viewPoint)
-//
-//        let objectsTapped = nodes(at: scenePoint)
-//
-//        if objectsTapped.count <= 1 {
-//            print("you tapped nowhere")
-//            return
-//        }
-//
-//        if let objectTapped = objectsTapped.first! as? BasicChicken {
-//            let name = String(describing: objectTapped.name)
-//            print("first: \(name)")
-//        }
-//        if let objectTapped = objectsTapped.first! as? StupidChicken {
-//            let name = String(describing: objectTapped.name)
-//            print("first: \(name)")
-//        }
-//        return
-//    }
     
     // This function creates the game menu
     private func initializeGameFrame() {
@@ -277,9 +182,9 @@ class GameScene: SKScene {
         }
         
         // Place basic chickens
-        for _ in 0..<numBasicChickens {
+        for chickenNum in 0..<numBasicChickens {
             // Initialize chicken
-            let basicChicken: SKSpriteNode = BasicChicken()
+            let basicChicken: SKSpriteNode = BasicChicken(id: chickenNum)
             basicChicken.size.height = chickenHeight
             basicChicken.size.width = chickenWidth
             basicChicken.zPosition = 4
@@ -310,9 +215,9 @@ class GameScene: SKScene {
         }
         
         // Place stupid chickens
-        for _ in 0..<numStupidChickens {
+        for chickenNum in 0..<numStupidChickens {
             // Initialize chicken
-            let stupidChicken: SKSpriteNode = StupidChicken()
+            let stupidChicken: SKSpriteNode = StupidChicken(id: chickenNum)
             stupidChicken.size.height = chickenHeight
             stupidChicken.size.width = chickenWidth
             stupidChicken.zPosition = 4
@@ -440,6 +345,76 @@ class GameScene: SKScene {
     }
     
     
+    ///// Gesture Recognition ///////
+    @objc func handleTapFrom(recognizer: UITapGestureRecognizer) {
+        
+    }
+    
+    @objc func handlePanFrom(recognizer: UIPanGestureRecognizer) {
+        print("in pan function")
+        if recognizer.state == .began {
+            // Get the starting location
+            var touchLocation = recognizer.location(in: recognizer.view)
+            touchLocation = self.convertPoint(fromView: touchLocation)
+            print("gesture began")
+            
+            // Save the node being touched
+            self.selectedNodeForTouch(touchLocation: touchLocation)
+        } else if recognizer.state == .changed {
+            // Get the translation
+            var translation = recognizer.translation(in: recognizer.view!)
+            translation = CGPoint(x: translation.x, y: -translation.y)
+            
+            // Move the chicken
+            self.panForTranslation(translation: translation)
+            recognizer.setTranslation(CGPoint(x: 0, y: 0), in: recognizer.view)
+        } else if recognizer.state == .ended {
+            //            if selectedNode.name != kAnimalNodeName {
+            //                let scrollDuration = 0.2
+            //                let velocity = recognizer.velocity(in: recognizer.view)
+            //                let pos = selectedNode.position
+            //
+            //                // This just multiplies your velocity with the scroll duration.
+            //                let p = CGPoint(x: velocity.x * CGFloat(scrollDuration), y: velocity.y * CGFloat(scrollDuration))
+            //
+            //                var newPos = CGPoint(x: pos.x + p.x, y: pos.y + p.y)
+            //                newPos = self.boundLayerPos(newPos)
+            //                selectedNode.removeAllActions()
+            //
+            //                let moveTo = SKAction.moveTo(newPos, duration: scrollDuration)
+            //                moveTo.timingMode = .easeOut
+            //                selectedNode.runAction(moveTo)
+            //            }
+        }
+    }
+    
+    func selectedNodeForTouch(touchLocation: CGPoint) {
+        // Finds the node at the touch location
+        let touchedNode = self.atPoint(touchLocation)
+        
+        // Check if the node is a touchable object
+        if touchedNode is TouchableObject {
+            // Check if the node is not the same as the previously selected node
+            print("touching chicken")
+            if !(selectedChicken == touchedNode as? TouchableObject) {
+                // Reset the selected node's actions
+                selectedChicken.removeAllActions()
+                selectedChicken = touchedNode as? TouchableObject
+                print("new chicken")
+            }
+        }
+    }
+    
+    func panForTranslation(translation: CGPoint) {
+        let position = selectedChicken.position // error: unexpectedly found nil when unwrapping an optional value
+        selectedChicken.position = CGPoint(x: position.x + translation.x, y: position.y + translation.y)
+    }
+    
+    
+    
+    
+    
+    
     func touchDown(atPoint pos : CGPoint) {
 //        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
 //            n.position = pos
@@ -465,16 +440,8 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first
-        let touchLocation = touch!.location(in: self)
         
-        if let body = physicsWorld.body(at: touchLocation) {
-            if body.node!.name == "basic chicken" {
-                nodeBeingMoved = body.node as! BasicChicken
-                fingerOnNode = true
-                print("touching basic chicken")
-            }
-        }
+        
         
 //        if let label = self.label {
 //            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")

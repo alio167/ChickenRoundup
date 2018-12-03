@@ -9,12 +9,10 @@
 import UIKit
 import SpriteKit
 
-class BasicChicken: SKSpriteNode {
-    
-    init() {
+class BasicChicken: TouchableObject {
+    init(id: Int) {
         let texture = SKTexture(imageNamed: "Basic Chicken")
-        super.init(texture: texture, color: SKColor.clear, size: texture.size())
-        self.name = "basic chicken"
+        super.init(texture: texture, name: "basic chicken", id: id)
         self.physicsBody?.isDynamic = true
         self.physicsBody?.allowsRotation = false
         self.physicsBody?.friction = 0.5
