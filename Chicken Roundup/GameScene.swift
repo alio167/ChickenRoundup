@@ -25,15 +25,20 @@ class GameScene: SKScene {
     var objectsBar: SKShapeNode!
     var timerFrame: SKShapeNode!
     var timer: SKLabelNode!
+    var stopTimer: Bool!
     var game: GameManager!
     
-    // Pen restrictions
+    // Pen bounds
     var penMaxY: CGFloat!
     var penMinY: CGFloat!
     var penRangeY: CGFloat!
     var penMaxX: CGFloat!
     var penMinX: CGFloat!
     var penRangeX: CGFloat!
+    
+    // Coup bounds
+    var coupRight: CGFloat!
+    var coupBottom: CGFloat!
     
     // Level specific
     var currentLevel = 0
@@ -50,24 +55,32 @@ class GameScene: SKScene {
     var previousTranslateX: CGFloat = 0.0
     var previousTranslateY: CGFloat = 0.0
     var selectedChicken: TouchableObject!
+    var emptyObject: TouchableObject!
     var fingerOnNode: Bool = false
     
     // This function is called once GameScene has loaded
     override func didMove(to view: SKView) {
         // Set gesture recognition info
         let texture = SKTexture(imageNamed: "Basic Chicken")
-        selectedChicken = TouchableObject(texture: texture, name: "none", id: -1)
+        emptyObject = TouchableObject(texture: texture, name: "none", id: -1)
+        selectedChicken = emptyObject
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTapFrom))
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanFrom))
+        view.addGestureRecognizer(tapGestureRecognizer)
         view.addGestureRecognizer(panGestureRecognizer)
         
         
-        // Set pen restrictions
-        penMaxY = (frame.size.height / 2) - 140
+        // Set pen bounds
+        penMaxY = (frame.size.height / 2) - 130
         penMinY = (frame.size.height / -2) + 150
         penRangeY = penMaxY - penMinY
-        penMaxX = (frame.size.width / 2) - 100
-        penMinX = (frame.size.width / -2) + 100
+        penMaxX = (frame.size.width / 2) - 10
+        penMinX = (frame.size.width / -2) + 10
         penRangeX = penMaxX - penMinX
+        
+        // Set coup boudns
+        coupRight = penMinX + 200
+        coupBottom = penMaxY - 150
         
         // Create the game frame
         game = GameManager(scene: self)
@@ -107,7 +120,8 @@ class GameScene: SKScene {
         self.addChild(timerFrame)
 
         // Initialize timer
-        timer = SKLabelNode(fontNamed: "ArielRoundedMTBold")
+        stopTimer = false
+        timer = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
         timer.zPosition = 3
         timer.position = CGPoint(x: 0, y: timerFrame.position.y - 25)
         timer.fontSize = 60
@@ -197,7 +211,8 @@ class GameScene: SKScene {
             // Find results of location
             var boundsResults = outOfBounds(objectPosition: chickenPosition, width: chickenWidth, height: chickenHeight)
             var treeResults = inTree(chickenPosition: chickenPosition)
-            while treeResults.inTree || boundsResults.outOfBounds {
+            var coupResults = inCoup(chickenPosition: chickenPosition)
+            while treeResults.inTree || boundsResults.outOfBounds || coupResults {
                 // Update position
                 randomX = CGFloat(arc4random_uniform(UInt32(penRangeX))) + penMinX
                 randomY = CGFloat(arc4random_uniform(UInt32(penRangeY))) + penMinY
@@ -206,6 +221,7 @@ class GameScene: SKScene {
                 // Update results
                 boundsResults = outOfBounds(objectPosition: chickenPosition, width: chickenWidth, height: chickenHeight)
                 treeResults = inTree(chickenPosition: chickenPosition)
+                coupResults = inCoup(chickenPosition: chickenPosition)
             }
             basicChicken.position = chickenPosition
             
@@ -230,7 +246,8 @@ class GameScene: SKScene {
             // Find results of location
             var boundsResults = outOfBounds(objectPosition: chickenPosition, width: chickenWidth, height: chickenHeight)
             var treeResults = inTree(chickenPosition: chickenPosition)
-            while treeResults.inTree || boundsResults.outOfBounds {
+            var coupResults = inCoup(chickenPosition: chickenPosition)
+            while treeResults.inTree || boundsResults.outOfBounds || coupResults {
                 // Update position
                 randomX = CGFloat(arc4random_uniform(UInt32(penRangeX))) + penMinX
                 randomY = CGFloat(arc4random_uniform(UInt32(penRangeY))) + penMinY
@@ -239,6 +256,7 @@ class GameScene: SKScene {
                 // Update results
                 boundsResults = outOfBounds(objectPosition: chickenPosition, width: chickenWidth, height: chickenHeight)
                 treeResults = inTree(chickenPosition: chickenPosition)
+                coupResults = inCoup(chickenPosition: chickenPosition)
             }
             stupidChicken.position = chickenPosition
             
@@ -255,50 +273,59 @@ class GameScene: SKScene {
     }
     
     func outOfBounds(objectPosition: CGPoint, width: CGFloat, height: CGFloat) -> (outOfBounds: Bool, direction: Int, distance: CGFloat) {
+        // Get object bounds
         let objectLeft = objectPosition.x - (width / 2)
         let objectRight = objectPosition.x + (width / 2)
         let objectBottom = objectPosition.y - (height / 2)
         let objectTop = objectPosition.y + (height / 2)
         
+        // Set default return values
         var outOfBounds = false
         var direction = 0
         var distance: CGFloat = 0
         
-        // Chicken too far left, right, down, or up
-        if objectLeft < penMinX || objectRight > penMaxX || objectBottom < penMinY || objectTop > penMaxY {
+        // Check if object is out of bounds
+        let rightDistance = objectRight - penMaxX
+        let leftDistance = penMinX - objectLeft
+        let upDistance = objectTop - penMaxY
+        let downDistance = penMinY - objectBottom
+        if rightDistance > 0 {
+            // Object is too far right
+            // Object will need to go left
             outOfBounds = true
-            
-            // Find direction chicken should move to get back in bounds
-            let left = abs(objectRight - penMinX)
-            let right = abs(objectLeft - penMaxX)
-            let up = abs(objectBottom - penMaxY)
-            let down = abs(objectTop - penMinY)
-            
-            // Find distance chicken should move to get back in bounds
-            if left <= right && left <= up && left <= down {
-                direction = 1
-                distance = left + 1
-            } else if right <= up && right <= down {
-                direction = 2
-                distance = right + 1
-            } else if up <= down {
-                direction = 3
-                distance = up + 1
-            } else {
-                direction = 4
-                distance = down + 1
-            }
+            direction = 1
+            distance = rightDistance + 1
+        } else if leftDistance > 0 {
+            // Object is too far left
+            // Object will need to go right
+            outOfBounds = true
+            direction = 2
+            distance = leftDistance + 1
+        } else if downDistance > 0 {
+            // Object is too far down
+            // Object will need to go up
+            outOfBounds = true
+            direction = 3
+            distance = downDistance + 1
+        } else if upDistance > 0 {
+            // Object is too far up
+            // Object will need to go down
+            outOfBounds = true
+            direction = 4
+            distance = upDistance + 1
         }
         
         return (outOfBounds, direction, distance)
     }
     
     func inTree(chickenPosition: CGPoint) -> (inTree: Bool, direction: Int, distance: CGFloat) {
+        // Get chicken bounds
         let chickenLeft = chickenPosition.x - (chickenWidth / 2)
         let chickenRight = chickenPosition.x + (chickenWidth / 2)
         let chickenBottom = chickenPosition.y - (chickenHeight / 2)
         let chickenTop = chickenPosition.y + (chickenHeight / 2)
         
+        // Set default return values
         var inTree = false
         var direction = 0
         var distance: CGFloat = 0
@@ -325,6 +352,7 @@ class GameScene: SKScene {
                     
                     // Find distance chicken should move to get out of tree
                     if left <= right && left <= up && left <= down {
+                        // Chicken should go left
                         direction = 1
                         distance = left + 1
                     } else if right <= up && right <= down {
@@ -344,19 +372,52 @@ class GameScene: SKScene {
         return (inTree, direction, distance)
     }
     
+    func inCoup(chickenPosition: CGPoint) -> Bool {
+        // Get chicken bounds
+        let chickenRight = chickenPosition.x + (chickenWidth / 2)
+        let chickenBottom = chickenPosition.y - (chickenHeight / 2)
+        
+        // Set default return values
+        var inCoup = false
+        
+        // Check if chicken is in the coup
+        let inWidth1 = coupRight - chickenRight
+        //let inWidth2 = chickenRight - coupRight
+        let inHeight1 = chickenBottom - coupBottom
+        //let inHeight2 = coupBottom - chickenBottom
+        if inWidth1 > 0 && inHeight1 > 0 {
+            inCoup = true
+            print("chicken in coup")
+        }
+        
+        return inCoup
+    }
+    
     
     ///// Gesture Recognition ///////
     @objc func handleTapFrom(recognizer: UITapGestureRecognizer) {
-        
+        if stopTimer {
+            // back to levels view controller
+        } else {
+            // Get the node being touched
+            var touchLocation = recognizer.location(in: recognizer.view)
+            touchLocation = self.convertPoint(fromView: touchLocation)
+            let touchedNode = self.atPoint(touchLocation)
+            
+            // Check if the node is a touchable object
+            if touchedNode is TouchableObject {
+                // Make touched node stop moving
+                touchedNode.removeAllActions()
+                selectedChicken = touchedNode as? TouchableObject
+            }
+        }
     }
     
     @objc func handlePanFrom(recognizer: UIPanGestureRecognizer) {
-        print("in pan function")
         if recognizer.state == .began {
             // Get the starting location
             var touchLocation = recognizer.location(in: recognizer.view)
             touchLocation = self.convertPoint(fromView: touchLocation)
-            print("gesture began")
             
             // Save the node being touched
             self.selectedNodeForTouch(touchLocation: touchLocation)
@@ -369,22 +430,7 @@ class GameScene: SKScene {
             self.panForTranslation(translation: translation)
             recognizer.setTranslation(CGPoint(x: 0, y: 0), in: recognizer.view)
         } else if recognizer.state == .ended {
-            //            if selectedNode.name != kAnimalNodeName {
-            //                let scrollDuration = 0.2
-            //                let velocity = recognizer.velocity(in: recognizer.view)
-            //                let pos = selectedNode.position
-            //
-            //                // This just multiplies your velocity with the scroll duration.
-            //                let p = CGPoint(x: velocity.x * CGFloat(scrollDuration), y: velocity.y * CGFloat(scrollDuration))
-            //
-            //                var newPos = CGPoint(x: pos.x + p.x, y: pos.y + p.y)
-            //                newPos = self.boundLayerPos(newPos)
-            //                selectedNode.removeAllActions()
-            //
-            //                let moveTo = SKAction.moveTo(newPos, duration: scrollDuration)
-            //                moveTo.timingMode = .easeOut
-            //                selectedNode.runAction(moveTo)
-            //            }
+            selectedChicken = emptyObject
         }
     }
     
@@ -395,12 +441,10 @@ class GameScene: SKScene {
         // Check if the node is a touchable object
         if touchedNode is TouchableObject {
             // Check if the node is not the same as the previously selected node
-            print("touching chicken")
             if !(selectedChicken == touchedNode as? TouchableObject) {
                 // Reset the selected node's actions
                 selectedChicken.removeAllActions()
                 selectedChicken = touchedNode as? TouchableObject
-                print("new chicken")
             }
         }
     }
@@ -410,61 +454,28 @@ class GameScene: SKScene {
         selectedChicken.position = CGPoint(x: position.x + translation.x, y: position.y + translation.y)
     }
     
-    
-    
-    
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-//            n.position = pos
-//            n.strokeColor = SKColor.green
-//            self.addChild(n)
-//        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-//            n.position = pos
-//            n.strokeColor = SKColor.blue
-//            self.addChild(n)
-//        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-//            n.position = pos
-//            n.strokeColor = SKColor.red
-//            self.addChild(n)
-//        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        
-        
-//        if let label = self.label {
-//            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-//        }
-//
-//        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    
     // This function is called before each frame is rendered.
     override func update(_ currentTime: TimeInterval) {
         game.update(time: currentTime)
+    }
+    
+    // End game
+    func endGame(won: Bool) {
+        stopTimer = true
+        
+        // Create message textbox
+        let message = SKLabelNode(fontNamed: "ChalkboardSE-Regular")
+        message.zPosition = 5
+        message.position = CGPoint(x: 0, y: 0)
+        message.fontSize = 120
+        message.fontColor = SKColor.black
+        if won {
+            message.text = "You Won! :D"
+            print("won")
+        } else {
+            message.text = "You Lost :("
+            print("lost")
+        }
+        self.addChild(message)
     }
 }

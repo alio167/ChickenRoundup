@@ -291,6 +291,9 @@
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                     </view>
+                    <connections>
+                        <segue destination="AoR-3a-hnJ" kind="show" identifier="Levels" id="qNi-Nb-k3P"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
@@ -304,6 +307,7 @@
         <image name="Star_Filled" width="36" height="34"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="qNi-Nb-k3P"/>
         <segue reference="zkX-34-gwy"/>
     </inferredMetricsTieBreakers>
 </document>

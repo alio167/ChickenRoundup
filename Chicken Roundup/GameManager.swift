@@ -25,7 +25,8 @@ class GameManager {
     
     // Updates movement of chickens
     func update(time: Double) {
-        // Check if a chicken is in a tree or out of bounds
+        // Check if each chicken is out of bounds, in a tree, or in a coup
+        var removeChickens:[Int] = []
         for chickenInt in 0..<scene.chickenArray.count {
             // Check if out of bounds
             var chickenPosition = scene.chickenArray[chickenInt].node.position
@@ -44,10 +45,10 @@ class GameManager {
                 // Find which direction the chicken needs go and by how much
                 if boundsResults.direction == 1 {
                     // go left
+                    print("go left")
                     newX -= boundsResults.distance
                 } else if boundsResults.direction == 2 {
                     // go right
-                    print("going right")
                     newX += boundsResults.distance
                 } else if boundsResults.direction == 3 {
                     // go up
@@ -94,18 +95,59 @@ class GameManager {
                 scene.chickenArray[chickenInt].node.position = newPosition
                 scene.chickenArray[chickenInt].position = newPosition
             }
+            
+            // Check if in coup
+            chickenPosition = scene.chickenArray[chickenInt].node.position
+            let coupResults = scene.inCoup(chickenPosition: chickenPosition)
+            if coupResults {
+                // Remove chicken from scene
+                scene.chickenArray[chickenInt].node.removeFromParent()
+                
+                // Add chicken to list of removed chickens
+                removeChickens.append(chickenInt)
+            }
 
         }
+        
+        // Remove chickens from chickenArray
+        for chickenInt in removeChickens {
+            scene.chickenArray.remove(at: chickenInt)
+        }
+        
+        
         
         
         if nextTime == nil {
             nextTime = time + timeExtension
         } else {
-            if time >= nextTime! {
-                nextTime = time + timeExtension
-                moveChickens()
-                updateTimer()
+            if !scene.stopTimer {
+                // Check if player won
+                if scene.chickenArray.count == 0 {
+                    // End game
+                    scene.endGame(won: true)
+                }
+                
+                // Check if player lost
+                if scene.timer.text == "0" {
+                    // End game
+                    scene.endGame(won: false)
+                }
+                
+                // Do time interval actions
+                if time >= nextTime! {
+                    nextTime = time + timeExtension
+                    moveChickens()
+                    updateTimer()
+                }
+            } else {
+                if time >= nextTime! + 5 {
+                    // segue to levels
+                    print("segue")
+                    // scene.backToLevels()
+                }
             }
+            
+            
         }
     }
     
