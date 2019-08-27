@@ -24,7 +24,7 @@ class GameManager {
     }
     
     // Updates movement of chickens
-    func update(time: Double) {
+    func updateChickenPosition(time: Double) {
         // Check if each chicken is out of bounds, in a tree, or in a coup
         var removeChickens:[Int] = []
         for chickenInt in 0..<scene.chickenArray.count {

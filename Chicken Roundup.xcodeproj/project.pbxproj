@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4625F1732314841000F29432 /* Chicken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F1722314841000F29432 /* Chicken.swift */; };
+		4625F17623148F3100F29432 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F17523148F3100F29432 /* MenuView.swift */; };
+		4625F1782314915800F29432 /* UIView Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F1772314915800F29432 /* UIView Extension.swift */; };
+		4625F17A231497BE00F29432 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F179231497BE00F29432 /* Theme.swift */; };
+		4625F17D231498E200F29432 /* ThemableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F17C231498E200F29432 /* ThemableView.swift */; };
+		4625F17F2314A8E200F29432 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F17E2314A8E200F29432 /* InstructionsView.swift */; };
+		4625F1812314D8A000F29432 /* LevelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625F1802314D8A000F29432 /* LevelsView.swift */; };
 		6F23C94221618C860037B608 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F23C94121618C860037B608 /* AppDelegate.swift */; };
 		6F23C94421618C860037B608 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F23C94321618C860037B608 /* GameScene.sks */; };
 		6F23C94621618C860037B608 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F23C94521618C860037B608 /* Actions.sks */; };
@@ -19,13 +26,17 @@
 		6F23C95E2169B5F20037B608 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F23C95D2169B5F20037B608 /* MenuViewController.swift */; };
 		6F23C9602169B6070037B608 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F23C95F2169B6070037B608 /* InstructionsViewController.swift */; };
 		6F23C9622169B6150037B608 /* LevelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F23C9612169B6150037B608 /* LevelsViewController.swift */; };
-		6F9C008221A0D2AF00C05C3D /* BasicChicken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9C008121A0D2AF00C05C3D /* BasicChicken.swift */; };
-		6F9C008421A0D93400C05C3D /* StupidChicken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9C008321A0D93400C05C3D /* StupidChicken.swift */; };
 		6F9C008621A0D9B400C05C3D /* Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9C008521A0D9B400C05C3D /* Tree.swift */; };
-		6FA8FBA521B4BA9A003A5876 /* TouchableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA8FBA421B4BA9A003A5876 /* TouchableObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4625F1722314841000F29432 /* Chicken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chicken.swift; sourceTree = "<group>"; };
+		4625F17523148F3100F29432 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		4625F1772314915800F29432 /* UIView Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView Extension.swift"; sourceTree = "<group>"; };
+		4625F179231497BE00F29432 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		4625F17C231498E200F29432 /* ThemableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemableView.swift; sourceTree = "<group>"; };
+		4625F17E2314A8E200F29432 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
+		4625F1802314D8A000F29432 /* LevelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsView.swift; sourceTree = "<group>"; };
 		6F23C93E21618C860037B608 /* Chicken Roundup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chicken Roundup.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F23C94121618C860037B608 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6F23C94321618C860037B608 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -40,10 +51,7 @@
 		6F23C95D2169B5F20037B608 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		6F23C95F2169B6070037B608 /* InstructionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
 		6F23C9612169B6150037B608 /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsViewController.swift; sourceTree = "<group>"; };
-		6F9C008121A0D2AF00C05C3D /* BasicChicken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicChicken.swift; sourceTree = "<group>"; };
-		6F9C008321A0D93400C05C3D /* StupidChicken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StupidChicken.swift; sourceTree = "<group>"; };
 		6F9C008521A0D9B400C05C3D /* Tree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tree.swift; sourceTree = "<group>"; };
-		6FA8FBA421B4BA9A003A5876 /* TouchableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchableObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +65,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4625F17423148E3400F29432 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				6F23C95D2169B5F20037B608 /* MenuViewController.swift */,
+				4625F17523148F3100F29432 /* MenuView.swift */,
+				6F23C95F2169B6070037B608 /* InstructionsViewController.swift */,
+				4625F17E2314A8E200F29432 /* InstructionsView.swift */,
+				6F23C9612169B6150037B608 /* LevelsViewController.swift */,
+				4625F1802314D8A000F29432 /* LevelsView.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		4625F17B231498D500F29432 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				4625F17C231498E200F29432 /* ThemableView.swift */,
+				4625F179231497BE00F29432 /* Theme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		4625F1822314FC5300F29432 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
 		6F23C93521618C850037B608 = {
 			isa = PBXGroup;
 			children = (
@@ -76,6 +113,10 @@
 		6F23C94021618C860037B608 /* Chicken Roundup */ = {
 			isa = PBXGroup;
 			children = (
+				4625F17B231498D500F29432 /* Theme */,
+				4625F1772314915800F29432 /* UIView Extension.swift */,
+				4625F17423148E3400F29432 /* Menu */,
+				4625F1822314FC5300F29432 /* Game */,
 				6F23C94121618C860037B608 /* AppDelegate.swift */,
 				6F23C94321618C860037B608 /* GameScene.sks */,
 				6F23C94521618C860037B608 /* Actions.sks */,
@@ -86,12 +127,7 @@
 				6F23C94921618C860037B608 /* GameViewController.swift */,
 				6F23C94721618C860037B608 /* GameScene.swift */,
 				6F23C95B2161932F0037B608 /* GameManager.swift */,
-				6F23C95D2169B5F20037B608 /* MenuViewController.swift */,
-				6F23C95F2169B6070037B608 /* InstructionsViewController.swift */,
-				6F23C9612169B6150037B608 /* LevelsViewController.swift */,
-				6FA8FBA421B4BA9A003A5876 /* TouchableObject.swift */,
-				6F9C008121A0D2AF00C05C3D /* BasicChicken.swift */,
-				6F9C008321A0D93400C05C3D /* StupidChicken.swift */,
+				4625F1722314841000F29432 /* Chicken.swift */,
 				6F9C008521A0D9B400C05C3D /* Tree.swift */,
 			);
 			path = "Chicken Roundup";
@@ -129,6 +165,7 @@
 				TargetAttributes = {
 					6F23C93D21618C860037B608 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1030;
 					};
 				};
 			};
@@ -173,13 +210,17 @@
 				6F23C9602169B6070037B608 /* InstructionsViewController.swift in Sources */,
 				6F23C94821618C860037B608 /* GameScene.swift in Sources */,
 				6F23C95E2169B5F20037B608 /* MenuViewController.swift in Sources */,
+				4625F1782314915800F29432 /* UIView Extension.swift in Sources */,
+				4625F17A231497BE00F29432 /* Theme.swift in Sources */,
 				6F23C95C2161932F0037B608 /* GameManager.swift in Sources */,
-				6F9C008221A0D2AF00C05C3D /* BasicChicken.swift in Sources */,
+				4625F1732314841000F29432 /* Chicken.swift in Sources */,
 				6F9C008621A0D9B400C05C3D /* Tree.swift in Sources */,
 				6F23C9622169B6150037B608 /* LevelsViewController.swift in Sources */,
-				6FA8FBA521B4BA9A003A5876 /* TouchableObject.swift in Sources */,
-				6F9C008421A0D93400C05C3D /* StupidChicken.swift in Sources */,
+				4625F17623148F3100F29432 /* MenuView.swift in Sources */,
 				6F23C94A21618C860037B608 /* GameViewController.swift in Sources */,
+				4625F17F2314A8E200F29432 /* InstructionsView.swift in Sources */,
+				4625F17D231498E200F29432 /* ThemableView.swift in Sources */,
+				4625F1812314D8A000F29432 /* LevelsView.swift in Sources */,
 				6F23C94221618C860037B608 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -333,7 +374,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aotondo.Chicken-Roundup";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -351,7 +392,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.aotondo.Chicken-Roundup";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

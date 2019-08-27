@@ -54,16 +54,12 @@ class GameScene: SKScene {
     // Gesture recognition
     var previousTranslateX: CGFloat = 0.0
     var previousTranslateY: CGFloat = 0.0
-    var selectedChicken: TouchableObject!
-    var emptyObject: TouchableObject!
+    var selectedChicken: Chicken?
     var fingerOnNode: Bool = false
     
     // This function is called once GameScene has loaded
     override func didMove(to view: SKView) {
         // Set gesture recognition info
-        let texture = SKTexture(imageNamed: "Basic Chicken")
-        emptyObject = TouchableObject(texture: texture, name: "none", id: -1)
-        selectedChicken = emptyObject
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTapFrom))
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePanFrom))
         view.addGestureRecognizer(tapGestureRecognizer)
@@ -198,7 +194,7 @@ class GameScene: SKScene {
         // Place basic chickens
         for chickenNum in 0..<numBasicChickens {
             // Initialize chicken
-            let basicChicken: SKSpriteNode = BasicChicken(id: chickenNum)
+            let basicChicken = Chicken(type: .basic, id: chickenNum)
             basicChicken.size.height = chickenHeight
             basicChicken.size.width = chickenWidth
             basicChicken.zPosition = 4
@@ -233,7 +229,7 @@ class GameScene: SKScene {
         // Place stupid chickens
         for chickenNum in 0..<numStupidChickens {
             // Initialize chicken
-            let stupidChicken: SKSpriteNode = StupidChicken(id: chickenNum)
+          let stupidChicken = Chicken(type: .basic, id: chickenNum)
             stupidChicken.size.height = chickenHeight
             stupidChicken.size.width = chickenWidth
             stupidChicken.zPosition = 4
@@ -405,10 +401,10 @@ class GameScene: SKScene {
             let touchedNode = self.atPoint(touchLocation)
             
             // Check if the node is a touchable object
-            if touchedNode is TouchableObject {
+            if touchedNode is Chicken {
                 // Make touched node stop moving
                 touchedNode.removeAllActions()
-                selectedChicken = touchedNode as? TouchableObject
+                selectedChicken = touchedNode as? Chicken
             }
         }
     }
@@ -430,7 +426,7 @@ class GameScene: SKScene {
             self.panForTranslation(translation: translation)
             recognizer.setTranslation(CGPoint(x: 0, y: 0), in: recognizer.view)
         } else if recognizer.state == .ended {
-            selectedChicken = emptyObject
+            selectedChicken = nil
         }
     }
     
@@ -438,25 +434,22 @@ class GameScene: SKScene {
         // Finds the node at the touch location
         let touchedNode = self.atPoint(touchLocation)
         
-        // Check if the node is a touchable object
-        if touchedNode is TouchableObject {
-            // Check if the node is not the same as the previously selected node
-            if !(selectedChicken == touchedNode as? TouchableObject) {
-                // Reset the selected node's actions
-                selectedChicken.removeAllActions()
-                selectedChicken = touchedNode as? TouchableObject
-            }
+        if let touchedChicken = touchedNode as? Chicken {
+          if selectedChicken != touchedChicken {
+            selectedChicken = touchedChicken
+          }
         }
     }
     
     func panForTranslation(translation: CGPoint) {
-        let position = selectedChicken.position // error: unexpectedly found nil when unwrapping an optional value
+      guard let selectedChicken = selectedChicken else { return }
+        let position = selectedChicken.position
         selectedChicken.position = CGPoint(x: position.x + translation.x, y: position.y + translation.y)
     }
     
     // This function is called before each frame is rendered.
     override func update(_ currentTime: TimeInterval) {
-        game.update(time: currentTime)
+        game.updateChickenPosition(time: currentTime)
     }
     
     // End game

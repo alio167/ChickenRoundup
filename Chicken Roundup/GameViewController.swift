@@ -25,12 +25,7 @@ class GameViewController: UIViewController {
             }
                 // Set the scale mode to scale to fit the window
             
-            // }
-            
             view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
         }
     }
 

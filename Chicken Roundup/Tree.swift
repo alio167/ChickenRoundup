@@ -10,7 +10,6 @@ import UIKit
 import SpriteKit
 
 class Tree: SKSpriteNode {
-
     init() {
         let texture = SKTexture(imageNamed: "Tree")
         super.init(texture: texture, color: SKColor.clear, size: texture.size())
@@ -26,6 +25,4 @@ class Tree: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
-
 }
